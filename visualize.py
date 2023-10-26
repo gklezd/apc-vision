@@ -79,6 +79,9 @@ ACTS = model.activations;
 
 I = ACTS['I'].numpy();
 
+_, img_H, img_W, _ = I.shape
+print( I.shape)
+
 
 GRIDS1 = convert_node(ACTS['grids1'])
 GRIDS2 = convert_node(ACTS['grids2'])
@@ -107,7 +110,7 @@ T1 = CFG.T1
 T2 = CFG.T2
 T = T1*T2
 
-PLOT_WIDTH = 9
+PLOT_WIDTH = 8
 
 for n in range(N):
 	images = []
@@ -117,13 +120,8 @@ for n in range(N):
 		for t1 in range(T1):
 		
 			t = t2*T1+t1;
-			pidx = 1
-			plt.subplot(1,PLOT_WIDTH,pidx)
 			
-			plt.plot([mse[n] for mse in MSE])
-		
-			
-			pidx += 1;
+			pidx = 1;
 		
 			plt.subplot(1,PLOT_WIDTH,pidx)
 			plt.axis('off')
@@ -143,6 +141,8 @@ for n in range(N):
 				plt.imshow(I[n].reshape([H,W]),cmap='gray',vmin=0.0,vmax=1.0)
 			else:
 				plt.imshow(I[n].reshape([H,W,C]),vmin=0.0,vmax=1.0)
+			plt.xlim(0,img_W)
+			plt.ylim(img_H,0)
 				
 				
 			GRID_INIT = ACTS['init_grid1'].numpy()
@@ -180,7 +180,8 @@ for n in range(N):
 				plt.imshow(G2[t2][n].reshape([g2_sz,g2_sz]),cmap='gray',vmin=0.0,vmax=1.0)
 			else:					
 				plt.imshow(G2[t2][n].reshape([g2_sz,g2_sz,C]),vmin=0.0,vmax=1.0)
-			
+			plt.xlim(0,g2_sz)
+			plt.ylim(g2_sz,0)
 			
 			GRID1 = (GRIDS1[t][n]+1)*CFG.g2_sz/2
 			GRID1 = GRID1.reshape([2,-1])
